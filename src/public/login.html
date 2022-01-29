@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+        <link rel="stylesheet" href="css/index.css" />
+        <title>Log in - Coiner</title>
+
+    </head>
+    <body>
+        <header>
+            <div>	
+                <img onclick="switchTo(Links.baseUrl)" src="res/header--coiner-icon.svg">	
+            </div>
+        </header>
+        <div class="main-content signup-content">
+            <h2>Log in</h2>
+            <form id="logInForm">
+                <a id="signup-errornote">Error: Your E-Mail address or password is wrong!</a>
+                <input type="email" name="email" id="email" placeholder="E-Mail address">
+                <input type="password" name="password" id="password" placeholder="Password">
+                <span style="text-align: left"><input type="checkbox" name="showpass" onclick="showPassword()"><label for="showpass">Show password</label></span>
+                <span class="pill"></span>
+                <div class="signup-button-area">
+                    <button class="btn--accented" type="button" onclick="initLogin()">log in</button>
+                </div>
+                <a class="signup-bottomline" onclick="gotoResetPassword()">Forgot password</a>
+            </form>
+        </div>
+        <footer>
+            <span class="footer--poweredby">
+                <img src="res/footer--coiner-icon.svg" />
+                |&nbsp;&nbsp;powered by CoinmarketCap&nbsp;&nbsp;|&nbsp;&nbsp;
+                <a class="footer-credits" href="credits.html">Credits</a></span>
+        </footer>
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Login</title>
+        <meta name="description" content="Coiner app login">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/forgot.css">
+    </head>
+    <body>
+        <div id="tsparticles"></div>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <div class="forgotdiv">
+            <h3>Forgot password?</h3>
+
+            <div id="init">
+            <label for="username">Email Address</label>
+            <input type="email" placeholder="someone@coinerapp.com" id="username">
+            <p class="note">You will receive an email with a code</p>
+          
+            <button id="mainbut" onclick="initreset()">Send code</button>
+            </div>
+            <div id="codeenter">
+                <label for="code">Code</label>
+                <input type="number" placeholder="69420" id="code">
+              
+                <div id="pass_container">
+                    <label for="password">Password</label>
+                    <input type="password" placeholder="coineristhebest69!" id="password">
+                    <i class="far fa-eye" id="togglePassword" onclick="togglePass(this)"></i>
+                </div>
+                <p class="note">Dont forget your password next time :)</p>
+          
+                <button id="mainbut" onclick="finalise()">Finish</button>
+            </div>
+            <div class="social">
+              <div class="dc" onclick="window.location = 'http:\/\/localhost:8000/login.html'"><i class="fas fa-sign-in-alt"></i> Login</div>
+              <div class="tg" onclick="hascode()"><i class="far fa-question-circle"></i> Have code?</div>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tsparticles/1.37.3/tsparticles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/forgot.js"></script>
+</html>

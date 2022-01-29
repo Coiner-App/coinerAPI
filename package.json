@@ -1,0 +1,38 @@
+{
+  "name": "coinerapi",
+  "version": "1.0.0",
+  "description": "API for the coiner application",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node dist/server.js",
+    "build": "tsc && tscp",
+    "bs": "tsc && server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "crypto"
+  ],
+  "author": "ender1324",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-rate-limit": "^6.0.0",
+    "jose": "^4.3.7",
+    "mongoose": "^6.0.14",
+    "nodemailer": "^6.7.2",
+    "typescript": "^4.5.2"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/nodemailer": "^6.4.4",
+    "typescript-cp": "^0.1.5"
+  }
+}

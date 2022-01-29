@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Login</title>
+        <meta name="description" content="Coiner app login">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/login.css">
+    </head>
+    <body>
+        <div id="tsparticles"></div>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <div class="logindiv">
+            <h3>Coiner Login</h3>
+
+            <label for="username">Email Address</label>
+            <input type="email" placeholder="someone@coinerapp.com" id="username">
+          
+            <div id="pass_container">
+                <label for="password">Password</label>
+                <input type="password" placeholder="coineristhebest69!" id="password">
+                <i class="far fa-eye" id="togglePassword" onclick="togglePass(this)"></i>
+            </div>
+            <p class="note">Did you know that coiner was called ClashOfCoins in developent</p>
+          
+            <button onclick="initlogin()">Log In</button>
+            <div class="social">
+              <div class="dc" onclick="window.location = 'http:\/\/localhost:8000/register.html'"><i class="fas fa-sign-in-alt"></i> Register</div>
+              <div class="tg" onclick="window.location = 'http:\/\/localhost:8000/forgot.html'"><i class="far fa-question-circle"></i> Forgot</div>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tsparticles/1.37.3/tsparticles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/login.js"></script>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+        <link rel="stylesheet" href="css/index.css" />
+        <title>My profile - Coiner</title>
+    </head>
+    <body>
+        <header>
+            <div>
+                <img onclick="switchTo(Links.baseUrl)" src="res/header--coiner-icon.svg">
+            </div>
+        </header>
+        <div class="main-content">
+            <h2>Profile stats</h2>
+            <br>
+            <ul class="profile--info-list">
+                <li>
+                    <a class="profile--info-list-title">Display name</a>
+                    <a class="profile--info-list-value" id="displayname">Loading..</a>
+                </li>
+                <li>
+                    <a class="profile--info-list-title">User name</a>
+                    <a class="profile--info-list-value" id="username">Loading..</a>
+                </li>
+                <li>
+                    <a class="profile--info-list-title">Account ID</a>
+                    <a class="profile--info-list-value" id="accountid">Loading..</a>
+                </li>
+                <li>
+                    <a class="profile--info-list-title">E-Mail</a>
+                    <a class="profile--info-list-value" id="email">Loading..</a>
+                </li>
+                <li>
+                    <a class="profile--info-list-title">Coiner net worth</a>
+                    <a class="profile--info-list-value" id="networth">Loading..</a>
+                </li>
+                <li>
+                    <a class="profile--info-list-title">Verified</a>
+                    <a class="profile--info-list-value" id="verified">Loading..</a>
+                </li>
+            </ul>
+            <br>
+            <span class="pill"></span>
+            <br>
+            <button class="btn--accented" id="logout" onclick="logOut()">log out</button>
+        </div>
+        <footer>
+            <span class="footer--poweredby">
+                <img src="res/footer--coiner-icon.svg" />
+                |&nbsp;&nbsp;powered by CoinmarketCap&nbsp;&nbsp;|&nbsp;&nbsp;
+                <a class="footer-credits" href="credits.html">Credits</a></span>
+        </footer>
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/profileinfo.js" async></script>
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+</html>

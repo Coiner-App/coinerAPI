@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Coiner Register</title>
+    <meta name="description" content="Coiner app register">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/register.css">
+    <link rel="stylesheet" href="css/popup.css">
+</head>
+
+<body>
+    <div id="tsparticles"></div>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <div class="registerdiv">
+        <h3>Coiner Register</h3>
+
+        <label for="displayname">Display Name</label>
+        <input type="text" placeholder="Some One" id="displayname">
+
+        <label for="username">Username</label>
+        <input type="username" placeholder="someone69" id="username">
+
+        <label for="email">Email Address</label>
+        <input type="email" placeholder="someone@coinerapp.com" id="email">
+
+        <div id="pass_container">
+            <label for="password">Password</label>
+            <input type="password" placeholder="coineristhebest69!" id="password">
+            <i class="far fa-eye" id="togglePassword" onclick="togglePass(this)"></i>
+        </div>
+        <p class="note">Did you know that coiner means a person who collects coins</p>
+
+        <button onclick="initregister()">Register</button>
+        <div class="social">
+            <div class="dc" onclick="window.location = 'http:\/\/localhost:8000/login.html'"><i
+                    class="fas fa-sign-in-alt"></i> Login</div>
+            <div class="tg" onclick="togglepass();"><i class="far fa-question-circle"></i> Support</div>
+        </div>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tsparticles/1.37.3/tsparticles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="js/register.js"></script>
+<script src="js/popup.js"></script>
+
+</html>

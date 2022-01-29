@@ -1,0 +1,174 @@
+* {
+    font-family: "Quicksand", sans-serif;
+}
+
+::-webkit-file-upload-button {
+    color: white;
+    background-color: #121212;
+    border: 2px solid #242424;
+    border-radius: 4px;
+    padding: 4px 8px 4px 8px;
+    font-family: "Quicksand", sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #121212; 
+}
+
+::-webkit-scrollbar-thumb {
+    background: #242424;
+    border-radius: 16px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #404040; 
+}
+
+body {
+    font-family: "Quicksand", sans-serif;
+    background-color: black;
+    color: white;
+}
+
+h1 {
+    font-family: "Quicksand", sans-serif;
+}
+
+button {
+    position: relative;
+    overflow: hidden;
+    color: white;
+    background-color: #121212;
+    border: 2px solid #242424;
+    border-radius: 8px;
+    padding: 8px 16px 8px 16px;
+    font-family: "Quicksand", sans-serif;
+}
+
+input {
+    color: white;
+    background-color: #121212;
+    border: 2px solid #242424;
+    border-radius: 4px;
+    font-family: "Quicksand", sans-serif;
+}
+
+option {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+table {
+    border-collapse: collapse;
+    border-radius: 5px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    font-family: "Quicksand", sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+}
+  
+th {
+    background: #DE1212;
+    color: #121212;
+    text-align: left;
+}
+  
+th, td {
+    padding: 10px 20px;
+}
+  
+tr:nth-child(even) {
+    background: #242424;
+}
+
+select {
+    width: auto;
+    height: 228px;
+    border: none;
+    background-color: #121212;
+    color: white;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    overflow-y: auto;
+}
+
+select:focus{
+    border: none;
+    outline: none;
+}
+
+span.ripple {
+    position: absolute; /* The absolute position we mentioned earlier */
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 600ms linear;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.smallbutton {
+    color: white;
+    background-color: #242424;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px 4px 8px;
+    font-family: "Quicksand", sans-serif;
+}
+
+#container {
+    min-width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.stat-container {
+    margin-bottom: 8px;
+}
+  
+.stat-text {
+    margin-right: 0.75rem;
+}
+
+.stats-select {
+    width: 512px;
+    min-height: 100%;
+    background-color: #121212;
+    border: 2px solid #242424;
+    margin-top: 0.83em;
+    margin-left: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+@media(max-width: 800px) {
+    #container {
+        flex-flow: wrap;
+    }
+    .stats-select, select, option {
+      min-width: 0;
+      min-height: 0;
+      overflow: auto;
+      display: block;
+    }
+    .stats-select {
+        margin-top: 4px;
+        margin-left: 0px;
+        margin-right: 8px;
+        overflow: hidden;
+    }
+    .container hr {
+        width: 100%;
+      }
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+      }
+}

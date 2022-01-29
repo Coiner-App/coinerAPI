@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+        <link rel="stylesheet" href="css/index.css" />
+        <title>Home - Coiner</title>
+    </head>
+    <body>
+        <section class="landing">
+            <div class="landing--left">
+                <h1>
+                    Join the <span style="color: var(--accent-primary)">crypto</span><br>revolution
+                    <span style="color: var(--accent-primary)">NOW!</span>
+                </h1>
+                <h3>Welcome to Coiner, the free crypto trading simulation.</h3>
+                <span class="landing--buttonarea"><button class="btn--filled landing--download" onclick="gotoDownloads()">
+                    download</button></span>
+            </div>
+            <div class="landing--right">
+                <img src="res/landing--preview.png" alt="Preview" />
+            </div>
+        </section>
+        <section class="post-landing">
+            <h2>Features</h2>
+            <div class="post-landing--features">
+                <div class="post-landing--features-card">
+                    <img src="res/landing--features-1.svg" />
+                    <h4>Always on point.</h4>
+                    <p>
+                        Coiner utilizes the CoinmarketCap API to deliver
+                        accurate, real-time market data.
+                    </p>
+                </div>
+                <div class="post-landing--features-card">
+                    <img src="res/landing--features-2.svg" />
+                    <h4>Cross-platform.</h4>
+                    <p>
+                        Coiner not only works on Android, iOS as an App, it's
+                        also fully usable inside the browser!
+                    </p>
+                </div>
+                <div class="post-landing--features-card">
+                    <img src="res/landing--features-3.svg" />
+                    <h4>Social by design.</h4>
+                    <p>
+                        Find out who's the best trader by comparing your
+                        statistics using our leaderboards!
+                    </p>
+                </div>
+            </div>
+            <div class="signup-content" id="signup-content"></div>
+        </section>
+        <footer>
+            <span class="footer--poweredby">
+                <img src="res/footer--coiner-icon.svg" />
+                |&nbsp;&nbsp;powered by CoinmarketCap&nbsp;&nbsp;|&nbsp;&nbsp;
+                <a class="footer-credits" href="credits.html">Credits</a></span>
+        </footer>
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/landing.js"></script>
+    <script src="js/auth.js"></script>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+        <link rel="stylesheet" href="css/index.css" />
+        <title>Credits - Coiner</title>
+    </head>
+    <body>
+        <header>
+            <div>
+                <img onclick="switchTo(Links.baseUrl)" src="res/header--coiner-icon.svg">
+                <a onclick="switchTo(Links.logIn)" class="header-login">Login</a>    
+            </div>
+        </header>
+        <div class="main-content content-page">
+            <h1>Download</h1>
+            <p>Select your desired platform and get started!</p>
+            <h3>Cross platform</h3>
+            <div class="download--card" onclick="switchTo('https:\/\/app.coinerapp.com')">
+                <p class="download--card-title">Web (Browser)</p>
+                <img src="res/chevron-right.svg">
+            </div>
+            <h3>Android</h3>
+            <div class="download--card" onclick="switchTo(Links.serverdllast + 'android')">
+                <p class="download--card-title">APK package</p>
+                <img src="res/download-outline.svg">
+            </div>
+            <div class="download--card">
+                <p class="download--card-title">Play Store</p>
+                <span class="download--soon-indicator">Coming soon</span>
+            </div>
+            <h3>PC</h3>
+            <div class="download--card">
+                <p class="download--card-title">Web app</p>
+                <span class="download--soon-indicator">Coming soon</span>
+            </div>
+            <h3>iOS</h3>
+            <div class="download--card">
+                <p class="download--card-title">App Store</p>
+                <span class="download--soon-indicator">Coming soon</span>
+            </div>
+        </div>
+        <footer>
+            <span class="footer--poweredby">
+                <img src="res/footer--coiner-icon.svg" />
+                |&nbsp;&nbsp;powered by CoinmarketCap&nbsp;&nbsp;|&nbsp;&nbsp;
+                <a class="footer-credits" href="credits.html">Credits</a></span>
+        </footer>
+    </body>
+    <script src="js/common.js"></script>
+</html>

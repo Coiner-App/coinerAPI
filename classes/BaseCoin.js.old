@@ -1,0 +1,26 @@
+class BaseCoin {
+    static geckoURL = "https://api.coingecko.com/api/v3/coins/";
+    static name = "BaseCoin";
+    static geckoID = "bitcoin";
+    static shortName = "BSC";
+    axios = require('axios');
+    constructor(amount = 1, currency = "usd") {
+        this.amount = amount;
+        this.currency = currency;
+        axios.get('/internal/coin', {
+            params: {
+                id: geckoID,
+            }
+        }).then((response) => {
+            this.json = response.data;
+        }).catch((error) => {
+            return console.error(error);
+        })
+    }
+
+    get value() {
+        return data.pricedata.price * this.amount;
+    }
+}
+
+module.exports = BaseCoin;
