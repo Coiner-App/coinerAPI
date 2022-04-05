@@ -1,6 +1,6 @@
 ## Coiner API Documentation
-- [Coin Info/Price](https://github.com/coiner-app/coinerAPI/README.md#CoinInfo)
-- [Supported Coins](https://github.com/coiner-app/coinerAPI/README.md#SupportedCoins)
+- [Coin Info/Price](https://github.com/coiner-app/coinerAPI/README.md#coin-info)
+- [Supported Coins](https://github.com/coiner-app/coinerAPI/README.md#supported-coins)
 - [Register](https://github.com/coiner-app/coinerAPI/README.md#Register)
 - [Login](https://github.com/coiner-app/coinerAPI/README.md#Login)
 - [Verify](https://github.com/coiner-app/coinerAPI/README.md#Verify)
@@ -11,6 +11,8 @@
 - [Exchange](https://github.com/coiner-app/coinerAPI/README.md#Exchange)
 
 ### Coin Info
+#### Description:
+- Get the data of a coin for the app needs
 #### Endpoint:
 - /api/coin
 #### Arguments: 
@@ -47,7 +49,7 @@ result:
 
 - example2: GET /api/coin?id=BTC,ETH
 
-result:
+result2:
 ```js
 [
     {
@@ -90,5 +92,25 @@ result:
         },
         "data-by": "https://coinmarketcap.com"
     }
+]
+```
+
+### Supported coins
+#### Description:
+- Get all supported coin symbols by coiner
+#### Endpoint:
+- /api/supportedcoins
+#### Arguments: 
+##### None:
+- example: GET /api/supportedcoins
+
+result:
+```js
+[
+    "USDT",
+    "BTC",
+    "ETH",
+    "DOGE",
+    "ADA"
 ]
 ```
