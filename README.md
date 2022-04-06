@@ -1,14 +1,20 @@
 ## Coiner API Documentation
 - [Coin Info/Price](README.md#coin-info)
 - [Supported Coins](README.md#supported-coins)
-- [Register](https://github.com/coiner-app/coinerAPI/README.md#Register)
-- [Login](https://github.com/coiner-app/coinerAPI/README.md#Login)
-- [Verify](https://github.com/coiner-app/coinerAPI/README.md#Verify)
-- [Forgot (password)](https://github.com/coiner-app/coinerAPI/README.md#Forgot)
-- [Me](https://github.com/coiner-app/coinerAPI/README.md#profileMe)
-- [Portfolio](https://github.com/coiner-app/coinerAPI/README.md#Portfolio)
-- [Logout](https://github.com/coiner-app/coinerAPI/README.md#Logout)
-- [Exchange](https://github.com/coiner-app/coinerAPI/README.md#Exchange)
+- [Register](README.md#Register)
+- [Login](README.md#Login)
+- [Verify](README.md#Verify)
+- [Forgot (password)](README.md#Forgot)
+- [Me](README.md#profileMe)
+- [Portfolio](README.md#Portfolio)
+- [Logout](README.md#Logout)
+- [Exchange](README.md#Exchange)
+
+> **ALL GET REQUESTS USE QUERY PARAMS FOR ARGUMENTS AND SENSITIVE DATA IN POST REQUESTESTS IS URL ENCODED IN BODY.**
+
+> Endpoints with general example heading usually have all their arguments required, other functions will have example in arguments.
+
+> Some endpoints have different outcomes depending on request type (GET/POST). That should be expicitly separated.
 
 ### Coin Info
 #### Description:
@@ -17,6 +23,8 @@
 - /api/coin
 #### Arguments: 
 ##### id:
+- **required**
+- query param
 - symbol of coin that is supported
 - arrays supported
 - example: GET /api/coin?id=BTC
@@ -46,6 +54,7 @@ result:
     },
 ]
 ```
+> Output may be in subject to change
 
 - example2: GET /api/coin?id=BTC,ETH
 
@@ -114,3 +123,32 @@ result:
     "ADA"
 ]
 ```
+
+### Register
+#### Description:
+- Basic endpoint for registering a user. Requires [verify](README.md#verify)
+#### Endpoint:
+- /auth/register
+#### Arguments:
+##### username:
+- **required**
+- **must be in body url encoded**
+- gets verified with this regex: `/^[a-z0-9_]{3,16}$/igm`
+##### email:
+- **required**
+- **must be in body url encoded**
+- gets verified with this regex: `/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/`
+##### password:
+- **required**
+- **must be in body url encoded**
+- **sensitive data - must be sent ONLY over HTTPS**
+- there is no general limitation to what the password can be, even special symbols are allowed (such as ~\\\`:"/<,.) and the server should handle it perfectly anyway as everything gets turned to random numbers anyway
+#### General Example:
+- POST /auth/register
+- Body content type: www/x-url-encoded
+- Body: username=safahd&email=lol@coiner.com&password:L+RATIO+urblack+urwhite+urasian
+- Result:
+```js
+{ code: 200, message: "Verify email sent to your email." }
+```
+> Usually the follow up should be the user getting a code on the email he entered and a prompt to enter the code should be on the client side.
