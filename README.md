@@ -1,6 +1,6 @@
 ## Coiner API Documentation
-- [Coin Info/Price](https://github.com/coiner-app/coinerAPI/README.md#coin-info)
-- [Supported Coins](https://github.com/coiner-app/coinerAPI/README.md#supported-coins)
+- [Coin Info/Price](README.md#coin-info)
+- [Supported Coins](README.md#supported-coins)
 - [Register](https://github.com/coiner-app/coinerAPI/README.md#Register)
 - [Login](https://github.com/coiner-app/coinerAPI/README.md#Login)
 - [Verify](https://github.com/coiner-app/coinerAPI/README.md#Verify)
