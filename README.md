@@ -1,4 +1,4 @@
-## Coiner API Documentation
+## Coiner API Documentation (!!INCOMPLETE!!)
 - [Coin Info/Price](README.md#coin-info)
 - [Supported Coins](README.md#supported-coins)
 - [Register](README.md#Register)
@@ -146,7 +146,7 @@ result:
 #### General Example:
 - POST /auth/register
 - Body content type: www/x-url-encoded
-- Body: username=safahd&email=lol@coiner.com&password:L+RATIO+urblack+urwhite+urasian
+- Body: username=safahd&email=lol@coiner.com&password:examplepass1234!!
 - Result:
 ```js
 { code: 200, message: "Verify email sent to your email." }
