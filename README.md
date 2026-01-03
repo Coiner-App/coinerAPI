@@ -1,3 +1,4 @@
+### For [website screenshots](showcase.md)
 ## Coiner API Documentation (!!INCOMPLETE!!)
 - [Coin Info/Price](README.md#coin-info)
 - [Supported Coins](README.md#supported-coins)
