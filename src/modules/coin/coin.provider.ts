@@ -1,0 +1,71 @@
+import axios from 'axios';
+import { config } from '../../config/env.js';
+import { type CoinType, type PriceDataType } from './coin.schema.js';
+
+export default class CoinProvider {
+
+    private readonly baseUrl = 'https://api.coingecko.com/api/v3';
+
+    /**
+     * Maps a GeckoCoin market array data object to an [CoinType] Object
+     * @param {any} raw - The raw coin object from GeckoCoins market array
+     * @param {string} currency - The currency from the GeckoCoin market API call
+     **/
+    private mapGeckoToCoin(raw: any, currency: string): CoinType {
+        const getPriceData = (): PriceDataType => ({
+            price: (raw.current_price as number) || 0,
+            marketcap: (raw.market_cap as number) || 0,
+            volume: (raw.total_volume as number) || 0,
+            change24h: (raw.price_change_percentage_24h_in_currency as number) || 0,
+            change7d: (raw.price_change_percentage_7d_in_currency as number) || 0,
+            change30d: (raw.price_change_percentage_30d_in_currency as number) || 0,
+            change1y: (raw.price_change_percentage_1y_in_currency as number) || 0,
+            ath: (raw.ath as number) || 0,
+            atl: (raw.atl as number) || 0
+        });
+
+        return {
+            geckoid: raw.id,
+            marketrank: raw.market_cap_rank || 0,
+            name: raw.name,
+            slug: raw.id,
+            symbol: raw.symbol?.toUpperCase(),
+            description: raw.description || '',
+            pricedata: {
+                [currency]: getPriceData(),
+            },
+            lastUpdated: new Date(raw.last_updated || Date.now()).getTime(),
+        };
+    }
+
+    public async getAllCoinsData(coinIds: string[]): Promise<CoinType[]> {
+        try {
+            const response = await axios.get(`${this.baseUrl}/coins/markets`, {
+                headers: {
+                    'x-cg-demo-api-key': config.geckoKey
+                },
+                params: {
+                    locale: 'en',
+                    precision: 2,
+                    order: 'market_cap_desc',
+                    per_page: 100,
+                    page: 1,
+                    sparkline: true,
+                    ids: coinIds.join(','),
+                    vs_currency: 'usd',
+                    price_change_percentage: '1h,24h,7d,30d,1y'
+                }
+            });
+
+            const data = response.data as unknown[];
+            const coins: CoinType[] = [];
+            for (const coin of data) {
+                coins.push(this.mapGeckoToCoin(coin, 'usd'));
+            }
+
+            return coins;
+        } catch (error) {
+            throw Error(`Error fetching coin data for`);
+        }
+    }
+}

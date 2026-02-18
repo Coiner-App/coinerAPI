@@ -1,9 +1,12 @@
-import fastify from "fastify";
+import fastify, { type FastifyInstance } from "fastify";
+import { CoinRoutes } from "./modules/coin/coin.routes.js";
 
 export async function buildApp() {
-    const app = fastify({logger: true});
+    const app: FastifyInstance = fastify({ logger: true });
 
-    app.get('/auth', async (request, reply) => {
+    app.register(CoinRoutes, { prefix: '/api' });
+
+    app.get('/', async (request, reply) => {
         reply.send({ hello: 'world' });
     });
 
