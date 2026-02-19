@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { config } from '../../config/env.js';
 import { type CoinType, type PriceDataType } from './coin.schema.js';
+import { ApiError } from '../../shared/errors.js';
 
 export default class CoinProvider {
 
@@ -39,6 +40,7 @@ export default class CoinProvider {
     }
 
     public async getAllCoinsData(coinIds: string[]): Promise<CoinType[]> {
+        if (coinIds.length == 0 || coinIds[0] == '') throw new Error("No coins provided!");
         try {
             const response = await axios.get(`${this.baseUrl}/coins/markets`, {
                 headers: {
@@ -57,6 +59,11 @@ export default class CoinProvider {
                 }
             });
 
+            if (response.status != 200) {
+                console.error(response.data);
+                throw new ApiError(502, "Could not retrieve coin data at this time.");
+            }
+
             const data = response.data as unknown[];
             const coins: CoinType[] = [];
             for (const coin of data) {
@@ -65,7 +72,7 @@ export default class CoinProvider {
 
             return coins;
         } catch (error) {
-            throw Error(`Error fetching coin data for`);
+            throw new ApiError(502, "Could not retrieve coin data at this time.");
         }
     }
 }
