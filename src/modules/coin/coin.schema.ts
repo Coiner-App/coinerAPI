@@ -1,5 +1,6 @@
 import { Type, type Static } from 'typebox';
 
+export const supported_coins: string[] = ['USDT', 'BTC', 'ETH', 'DOGE'] as const;
 export const supported_currencies: string[] = ['usd', 'eur', 'gbp', 'rub'] as const;
 
 export const PriceData = Type.Object({
@@ -31,7 +32,7 @@ export const CoinSchema = Type.Object({
     symbol: Type.String(),
     description: Type.String(),
     pricedata: Type.Object(dynamicPriceObject),
-    lastUpdated: Type.Integer(), // Unix timestamp :[
+    lastUpdated: Type.String({ format: 'date-time' }), // STRING BASED TIME!! NEEDS RECHECKING
 });
 
 export type CoinType = Static<typeof CoinSchema>;

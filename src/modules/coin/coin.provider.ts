@@ -35,7 +35,7 @@ export default class CoinProvider {
             pricedata: {
                 [currency]: getPriceData(),
             },
-            lastUpdated: new Date(raw.last_updated || Date.now()).getTime(),
+            lastUpdated: new Date(raw.last_updated || Date.now()).toUTCString(),
         };
     }
 
