@@ -41,10 +41,10 @@ export default class AuthController {
         const email = request.email;
         const password = request.password;
 
+        /// Susceptible to race conditions ///
         // Verify user doesnt already exist
         if (await this.userRepo.findByEmail(email)) return { code: 409, message: 'Email already in use.' };
         if (await this.userRepo.findByUsername(username)) return { code: 409, message: 'Username already in use.'}
-
         // Verify user doesn't already have a code sent
         if (await this.authRepo.findPendingByEmail(email)) return { code: 409, message: 'Registration already in progress.' }
 
@@ -59,8 +59,16 @@ export default class AuthController {
             createdAt: new Date(),
             verificationToken
         };
-        
-        await this.authRepo.createPendingUser(pendingusr);
+
+        try {
+            await this.authRepo.createPendingUser(pendingusr);
+        } catch (error: any) {
+            if (error.code === 11000) {
+                return { code: 409, message: 'Registration already in progress.' };
+            }
+            throw error;
+        }
+
         await this.emailService.sendVerificationMail(pendingusr.email, `http://localhost:8000/auth/verify?token=${verificationToken}`);
         return { code: 200, message: `Verification mail sent to ${pendingusr.email}` };
     }
@@ -68,22 +76,29 @@ export default class AuthController {
     public async verifyUser(token: string): Promise<VerifyResponse> {
         const pendingUser = await this.authRepo.consumePendingUser(token);
         if (!pendingUser) return { code: 404, message: "Verification link invalid or expired.", user_id: "-1" };
-        const user = await this.userRepo.createUser({
-            publicid: await this.userRepo.getNextIncId(),
-            username: pendingUser.username,
-            displayname: pendingUser.displayname ?? pendingUser.username,
-            email: pendingUser.email,
-            password: pendingUser.password,
-            coins: {
-                USDT: 100,
-                BTC: 0,
-                ETH: 0,
-                DOGE: 0
-            },
-            private: true,
-            privatemail: true,
-            verified: false
-        });
-        return { code: 201, message: "Registered successfully", user_id: user instanceof ObjectId ? user.toString() : user}   
+        try {
+            const user = await this.userRepo.createUser({
+                publicid: await this.userRepo.getNextIncId(),
+                username: pendingUser.username,
+                displayname: pendingUser.displayname ?? pendingUser.username,
+                email: pendingUser.email,
+                password: pendingUser.password,
+                coins: {
+                    USDT: 100,
+                    BTC: 0,
+                    ETH: 0,
+                    DOGE: 0
+                },
+                private: true,
+                privatemail: true,
+                verified: false
+            });
+            return { code: 201, message: "Registered successfully", user_id: user instanceof ObjectId ? user.toString() : user}
+        } catch (error: any) {
+            if (error.code === 11000) {
+                return { code: 409, message: 'User already exists!', user_id: "-1" };
+            }
+            throw error;
+        }
     }
 }

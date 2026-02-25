@@ -17,6 +17,14 @@ export async function buildApp() {
         { expireAfterSeconds: 1800 } 
     );
     
+    // ENSURE WE ALWAYS HAVE UNIQUE EMAILS AND USERNAMES !!! //
+    // We actually do not need to run this at every app.ts start,
+    // but it will be skipped if the index is already created
+    await db.collection('prending_users').createIndex({ email: 1 }, { unique: true });
+    await db.collection('pending_users').createIndex({ username: 1 }, { unique: true });
+    await db.collection('users').createIndex({ email: 1 }, { unique: true });
+    await db.collection('users').createIndex({ username: 1 }, { unique: true });
+    
     // Email client
     const emailService: EmailService = new EmailService();
 
