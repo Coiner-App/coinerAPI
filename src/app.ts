@@ -5,13 +5,13 @@ import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import { Db, MongoClient } from "mongodb";
 import { config } from "./config/env.js";
 import EmailService from "./shared/utils/email.service.js";
-import UserRepository from "./modules/user/user.repository.js";
 
 export async function buildApp() {
     // HELPER CLASSES SETUP //
     // Database
     const client = await MongoClient.connect(config.mongoUri);
     const db = client.db();
+    // Clean up pending users after 1800 seconds (30 mins)
     await db.collection('pending_users').createIndex(
         { "createdAt": 1 }, 
         { expireAfterSeconds: 1800 } 
@@ -19,11 +19,12 @@ export async function buildApp() {
     
     // ENSURE WE ALWAYS HAVE UNIQUE EMAILS AND USERNAMES !!! //
     // We actually do not need to run this at every app.ts start,
-    // but it will be skipped if the index is already created
+    // but it will (should) be skipped if the index is already created
     await db.collection('prending_users').createIndex({ email: 1 }, { unique: true });
     await db.collection('pending_users').createIndex({ username: 1 }, { unique: true });
     await db.collection('users').createIndex({ email: 1 }, { unique: true });
     await db.collection('users').createIndex({ username: 1 }, { unique: true });
+    await db.collection('sessions').createIndex({ "expiresAt": 1 }, { expireAfterSeconds: 0 });
     
     // Email client
     const emailService: EmailService = new EmailService();

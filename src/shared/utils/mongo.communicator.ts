@@ -1,4 +1,4 @@
-import { Db, MongoClient, ObjectId, type Document, type Filter, type OptionalUnlessRequiredId, type WithId, type WithoutId, type InferIdType } from 'mongodb';
+import { Db, MongoClient, ObjectId, type Document, type Filter, type OptionalUnlessRequiredId, type WithId, type WithoutId, type InferIdType, type DeleteOptions } from 'mongodb';
 import type { UserType } from '../../modules/user/user.schema.js';
 
 export default class MongoCommunicator {
@@ -77,5 +77,36 @@ export default class MongoCommunicator {
     public async insert<T extends Document>(collectionName: string, data: OptionalUnlessRequiredId<T>) {
         const result = await this.db.collection<T>(collectionName).insertOne(data);
         return result.insertedId;
+    }
+
+    /**
+     * Deletes a single document from the database collection based on its internal id
+     * @async
+     * @param collectionName - The name of the collection to delete from
+     * @param id - The internal ObjectId or string id of the document to delete
+     * @returns A boolean indicating if a document was deleted
+     */
+    public async deleteById<T extends Document>(collectionName: string, id: InferIdType<T> | string): Promise<boolean> {
+        if (!ObjectId.isValid(id)) return false;
+        const queryId = typeof id === 'string' ? new ObjectId(id) : id;
+        const result = await this.db.collection<T>(collectionName).deleteOne({ _id: queryId } as Filter<T>);
+        // Luckily the cast is safe because _id is guaranteed to exist and we verify id
+        return result.deletedCount === 1;
+    }
+
+    /**
+     * Deletes multiple documents from a collection based on a filter
+     * @async
+     * @param collectionName - The name of the collection to delete from
+     * @param filter - The MongoDB filter query to match documents for deletion
+     * @returns The number of documents deleted
+     */
+    public async deleteMany<T extends Document>(collectionName: string, filter: Filter<T>): Promise<number> {
+        const result = await this.db.collection<T>(collectionName).deleteMany(filter);
+        return result.deletedCount;
+    }
+
+    public async count<T extends Document>(collectionName: string, filter: Filter<T>): Promise<number> {
+        return this.db.collection<T>(collectionName).countDocuments(filter);
     }
 }

@@ -1,38 +1,86 @@
-
-import type { FastifyReply, FastifyRequest } from "fastify";
+import { ObjectId, type Db, type WithId } from "mongodb";
 import * as jose from "jose";
+import Bowser from "bowser";
 import type { LoginInput, LoginResponse, RegisterInput, RegisterResponse, VerifyResponse } from "./auth.schema.js";
 import AuthService from "./auth.service.js";
-import { ObjectId, type Db } from "mongodb";
 import MongoCommunicator from "../../shared/utils/mongo.communicator.js";
 import EmailService from "../../shared/utils/email.service.js";
-import AuthRepository, { type PendingUser } from "./auth.repository.js";
+import AuthRepository, { type PendingUser, type UserSession } from "./auth.repository.js";
 import UserRepository from "../user/user.repository.js";
 import { ApiError } from "../../shared/errors.js";
+import { config } from "../../config/env.js";
+import type { UserType } from "../user/user.schema.js";
 
 export default class AuthController {
+    private readonly jwtSecret: Promise<CryptoKey | Uint8Array<ArrayBufferLike>>;
     constructor(private readonly authRepo: AuthRepository, private readonly userRepo: UserRepository,
-        private readonly db: MongoCommunicator, private readonly emailService: EmailService) {}
+        private readonly db: MongoCommunicator, private readonly emailService: EmailService) {
+            this.jwtSecret = jose.importJWK(config.jwkSecret);
+    }
     
     /**
      * Logs in the user and returns a jwt token
      */
-    public async login(request: LoginInput, db: Db): Promise<LoginResponse> {
+    public async login(request: LoginInput, requestinfo: { ip: string, useragent: string, devicemodel: string | null }): Promise<LoginResponse> {
+        let user: WithId<UserType>;
         if ('username' in request) {
             const username = request.username;
+            user = await this.loginByUsername(username, request.password);
         } else {
             const email = request.email;
+            user = await this.loginByEmail(email, request.password);
         }
-        const password = request.password; 
 
-
-        // verify user exists, verify password, sign tokens, bla bla
+        const user_id = user._id.toString();
+        const access_tkn = {
+            user_id,
+            displayname: user.displayname,
+            username: user.username,
+            email: user.email,
+        }
+        // Setup the current session.
+        const refresh_tkn: string = crypto.randomUUID().replace(/-/g, '');
+        // I hate the javascript date class
+        const session_expdate = new Date();
+        session_expdate.setDate(session_expdate.getDate() + 7)
+        const session_device = requestinfo.devicemodel ?? AuthService.getBrowserInfo(requestinfo.useragent);
+        // interface based on the mongodb document
+        const session_obj: UserSession = {
+            _id: refresh_tkn,
+            userId: user._id,
+            ip: requestinfo.ip,
+            device: session_device ?? "Unknown",
+            createdAt: new Date(),
+            expiresAt: session_expdate,
+        }
+        if ((await this.authRepo.countSessions(user._id)) >= 5) this.authRepo.deleteOldestSession(user._id);
+        await this.authRepo.saveSession(session_obj);
+        const access_jwt = await new jose.SignJWT(access_tkn)
+            .setProtectedHeader({ alg: 'HS256' })
+            .setIssuedAt()
+            .setExpirationTime('1h')
+            .sign(await this.jwtSecret);
+        
+        return {
+            user_id,
+            access_token: access_jwt,
+            refresh_token: refresh_tkn,
+            expiresafter: 7 * 24 * 60 * 60, // week
+        }
     }
 
-    private async loginByUsername(username: string, password: string) {
+    private async loginByUsername(username: string, password: string): Promise<WithId<UserType>> {
         const user = await this.userRepo.findByUsername(username);
         if (!user) throw new ApiError(401, 'User not found.');
-        
+        if (!await AuthService.checkPassword(password, user.password)) throw new ApiError(401, 'Invalid password.');
+        return user;
+    }
+
+    private async loginByEmail(email: string, password: string): Promise<WithId<UserType>> {
+        const user = await this.userRepo.findByEmail(email);
+        if (!user) throw new ApiError(401, 'User not found.');
+        if (!await AuthService.checkPassword(password, user.password)) throw new ApiError(401, 'Invalid password.');
+        return user;
     }
 
     public async initiateRegister(request: RegisterInput): Promise<RegisterResponse> {

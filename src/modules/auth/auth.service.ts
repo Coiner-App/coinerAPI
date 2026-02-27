@@ -1,7 +1,5 @@
 import crypto from 'node:crypto';
-import MongoCommunicator from '../../shared/utils/mongo.communicator.js';
-import type { PendingUser } from './auth.repository.js';
-import type EmailService from '../../shared/utils/email.service.js';
+import Bowser from 'bowser';
 
 export default class AuthService {
     public static async saltPassword(password: string): Promise<string> {
@@ -71,10 +69,8 @@ export default class AuthService {
         return crypto.randomBytes(32).toString('hex');
     }
 
-    /**
-     * register
-     */
-    // public static async initiateRegister(input: PendingUser, db: Db, emailSerivce: EmailService) {
-        
-    // }
+    public static getBrowserInfo(ua: string): string {
+        const browser = Bowser.getParser(ua);
+        return `${browser.getBrowserName(false)} ${browser.getBrowserVersion()} on ${browser.getPlatformType(false)}`;
+    }
 }

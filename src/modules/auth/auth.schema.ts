@@ -29,6 +29,7 @@ export const LoginResponseSchema = Type.Object({
     user_id: Type.String(),
     access_token: Type.String(),
     refresh_token: Type.String(),
+    expiresafter: Type.Integer(),
 });
 
 export type LoginResponse = Static<typeof LoginResponseSchema>;

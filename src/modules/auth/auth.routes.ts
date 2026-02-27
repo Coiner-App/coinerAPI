@@ -1,7 +1,7 @@
 import { type FastifyPluginAsync } from "fastify";
 import { Type, type FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import type { Db } from 'mongodb'
-import { LoginResponseSchema, LoginSchema, RegisterResponseSchema, RegisterSchema, VerifyInput, type LoginInput } from "./auth.schema.js";
+import { LoginResponseSchema, LoginSchema, RegisterResponseSchema, RegisterSchema, VerifyInput, type LoginInput, type LoginResponse } from "./auth.schema.js";
 import AuthController from "./auth.controller.js";
 import MongoCommunicator from "../../shared/utils/mongo.communicator.js";
 import EmailService from "../../shared/utils/email.service.js";
@@ -26,6 +26,19 @@ export const AuthRoutes: FastifyPluginAsyncTypebox<AuthRouteOptions> = async (ap
     const authController = new AuthController(authRepo, userRepo, mongoCom, options.emailSerivce);
 
     // Routes
+    app.post('/login', {
+        schema: {
+            body: LoginSchema,
+            response: { '2xx': { type: 'object', data: LoginResponseSchema } }
+        }
+    }, async (request, reply) => {
+        const deviceHeader = request.headers['device-model'];
+        const devicemodel = typeof deviceHeader === 'string' ? deviceHeader.substring(0, 50).replace(/[<>]/g, '') : null;
+        const reqinfo = { ip: request.ip, useragent: request.headers["user-agent"] ?? "", devicemodel};
+        const loginres: LoginResponse = await authController.login(request.body, reqinfo);
+        return reply.status(200).send(loginres);
+    });
+
     app.post('/register', {
         schema: {
             body: RegisterSchema,
@@ -43,15 +56,5 @@ export const AuthRoutes: FastifyPluginAsyncTypebox<AuthRouteOptions> = async (ap
     }, async (request, reply) => {
         const controller = await authController.verifyUser(request.query.token);
         return reply.status(controller.code).send(controller);
-    });
-
-    app.post<{ Body: LoginInput }>('/login', {
-        schema: {
-            body: LoginSchema,
-            response: { '2xx': { type: 'object', data: LoginResponseSchema } }
-        }
-    }, async (request, reply) => {
-        const controller = await authController.login(request.body, db);
-        return controller;
     });
 }
