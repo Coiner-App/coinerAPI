@@ -55,7 +55,7 @@ export default class MongoCommunicator {
      * @param id - the internal ObjectId or string id that we need to search for
      * @returns The document or null depending on if it exists
      */
-    public async findById<T extends Document>(collectionName: string, id: InferIdType<T>): Promise<WithId<T> | null> {
+    public async findById<T extends Document>(collectionName: string, id: InferIdType<T> | string): Promise<WithId<T> | null> {
         if (!ObjectId.isValid(id)) return null;
         const queryId = typeof id === 'string' ? new ObjectId(id) : id;
         return this.db.collection<T>(collectionName).findOne({ _id: queryId } as Filter<T>);
@@ -86,7 +86,7 @@ export default class MongoCommunicator {
      * @param id - The internal ObjectId or string id of the document to delete
      * @returns A boolean indicating if a document was deleted
      */
-    public async deleteById<T extends Document>(collectionName: string, id: InferIdType<T>): Promise<boolean> {
+    public async deleteById<T extends Document>(collectionName: string, id: InferIdType<T> | string): Promise<boolean> {
         if (!ObjectId.isValid(id)) return false;
         const queryId = typeof id === 'string' ? new ObjectId(id) : id;
         const result = await this.db.collection<T>(collectionName).deleteOne({ _id: queryId } as Filter<T>);
