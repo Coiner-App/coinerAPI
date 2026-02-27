@@ -1,5 +1,3 @@
-import { error } from "console";
-
 const requiredKeys: string[] = [
   'GECKO_API_KEY',
   'MONGODB_URI',
