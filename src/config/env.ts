@@ -2,7 +2,7 @@ import { error } from "console";
 
 const requiredKeys: string[] = [
   'GECKO_API_KEY',
-  'MONGODB_PASSW',
+  'MONGODB_URI',
   'JWT_SECRET',
   'SMTP_USER',
   'SMTP_PASS',
@@ -20,7 +20,7 @@ const k = Buffer.from(jwtSecretKey).toString('base64').replace(/\+/g, '-').repla
 
 export const config = {
   port: parseInt(process.env.PORT || '8000', 10),
-  mongoUri: process.env.MONGODB_PASSW ?? 'mongodb://localhost:27017',
+  mongoUri: process.env.MONGODB_URI ?? 'mongodb://localhost:27017',
   geckoKey: process.env.GECKO_API_KEY,
   jwtSecretKey: jwtSecretKey,
   jwkSecret: { k, kty: 'oct', alg: 'HS256' },
