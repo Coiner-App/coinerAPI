@@ -61,6 +61,28 @@ export const AuthRoutes: FastifyPluginAsyncTypebox<AuthRouteOptions> = async (ap
         return controller;
     });
 
+    app.post('/logout',{ 
+        schema: { body: RefreshSchema }
+    }, async (request, reply) => {
+        const cookieHeader = request.headers.cookie;
+        let cookieToken: string | null = null;
+        if (cookieHeader) {
+            const matchstr: string = "refresh_token="
+            const startIndex: number = cookieHeader.indexOf(matchstr);
+
+            if (startIndex != -1) {
+                const tokenStart = startIndex + matchstr.length;
+                // the refresh token is 32 chars
+                cookieToken = cookieHeader.substring(tokenStart, tokenStart + 32);
+            }
+        }
+        const refresh_tkn = request.body.refresh_token ?? cookieToken;
+        if (!refresh_tkn) return reply.code(401).send({ code: 401, message: "No refresh token in body or cookie!"});
+        const controller = await authController.killSession(refresh_tkn!);
+        reply.header("Set-Cookie", `refresh_token=${refresh_tkn}; HttpOnly; Secure; SameSite=Strict; Path=/auth/refresh; Max-Age=0`);
+        return controller;
+    });
+
     app.post('/register', {
         schema: {
             body: RegisterSchema,

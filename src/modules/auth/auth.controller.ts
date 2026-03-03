@@ -68,6 +68,7 @@ export default class AuthController {
         }
     }
 
+    /** Gets user by username */
     private async userByUsername(username: string, password: string): Promise<WithId<UserType>> {
         const user = await this.userRepo.findByUsername(username);
         if (!user) throw new ApiError(401, 'User not found.');
@@ -75,6 +76,7 @@ export default class AuthController {
         return user;
     }
 
+    /** Gets user by email */
     private async userByEmail(email: string, password: string): Promise<WithId<UserType>> {
         const user = await this.userRepo.findByEmail(email);
         if (!user) throw new ApiError(401, 'User not found.');
@@ -110,6 +112,11 @@ export default class AuthController {
             refresh_token: refresh_tkn,
             expiresafter: 60 * 60 // hour
         };
+    }
+
+    public async killSession(refresh_tkn: string): Promise<boolean> {
+        const result = await this.authRepo.deleteSession(refresh_tkn);
+        return result;
     }
 
     public async initiateRegister(request: RegisterInput): Promise<RegisterResponse> {
