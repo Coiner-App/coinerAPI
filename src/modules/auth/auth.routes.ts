@@ -29,7 +29,7 @@ export const AuthRoutes: FastifyPluginAsyncTypebox<AuthRouteOptions> = async (ap
     app.post('/login', {
         schema: {
             body: LoginSchema,
-            response: { '2xx': { type: 'object', data: LoginResponseSchema } }
+            response: { '2xx': LoginResponseSchema }
         }
     }, async (request, reply) => {
         const deviceHeader = request.headers['device-model'];
@@ -86,7 +86,7 @@ export const AuthRoutes: FastifyPluginAsyncTypebox<AuthRouteOptions> = async (ap
     app.post('/register', {
         schema: {
             body: RegisterSchema,
-            response: { '2xx': { type: 'object', data: RegisterResponseSchema } }
+            response: { '2xx': RegisterResponseSchema }
         }
     }, async (request, reply) => {
         const controller = await authController.initiateRegister(request.body);
