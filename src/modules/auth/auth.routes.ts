@@ -1,7 +1,7 @@
 import { type FastifyPluginAsync } from "fastify";
 import { Type, type FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import type { Db } from 'mongodb'
-import { LoginResponseSchema, LoginSchema, RegisterResponseSchema, RegisterSchema, VerifyInput, type LoginInput, type LoginResponse } from "./auth.schema.js";
+import { LoginResponseSchema, LoginSchema, RefreshSchema, RegisterResponseSchema, RegisterSchema, VerifyInput, type LoginInput, type LoginResponse } from "./auth.schema.js";
 import AuthController from "./auth.controller.js";
 import MongoCommunicator from "../../shared/utils/mongo.communicator.js";
 import EmailService from "../../shared/utils/email.service.js";
@@ -40,6 +40,27 @@ export const AuthRoutes: FastifyPluginAsyncTypebox<AuthRouteOptions> = async (ap
         return reply.status(200).send(loginres);
     });
 
+    app.post('/refresh',{
+        schema: { body: RefreshSchema, response: { '2xx': LoginResponseSchema, '4xx': { code: Type.Integer(), message: Type.String() } } }
+    }, async (request, reply) => {
+        const cookieHeader = request.headers.cookie;
+        let cookieToken: string | null = null;
+        if (cookieHeader) {
+            const matchstr: string = "refresh_token="
+            const startIndex: number = cookieHeader.indexOf(matchstr);
+
+            if (startIndex != -1) {
+                const tokenStart = startIndex + matchstr.length;
+                // the refresh token is 32 chars
+                cookieToken = cookieHeader.substring(tokenStart, tokenStart + 32);
+            }
+        }
+        const refresh_tkn = request.body.refresh_token ?? cookieToken;
+        if (!refresh_tkn) return reply.code(401).send({ code: 401, message: "No refresh token in body or cookie!"});
+        const controller = await authController.refreshAuthToken(refresh_tkn!);
+        return controller;
+    });
+
     app.post('/register', {
         schema: {
             body: RegisterSchema,
@@ -51,9 +72,7 @@ export const AuthRoutes: FastifyPluginAsyncTypebox<AuthRouteOptions> = async (ap
     });
 
     app.get('/verify', {
-        schema: {
-            querystring: VerifyInput
-        }
+        schema: { querystring: VerifyInput }
     }, async (request, reply) => {
         const controller = await authController.verifyUser(request.query.token);
         return reply.status(controller.code).send(controller);

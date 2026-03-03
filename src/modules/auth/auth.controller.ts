@@ -82,6 +82,36 @@ export default class AuthController {
         return user;
     }
 
+    public async refreshAuthToken(refresh_tkn: string): Promise<LoginResponse> {
+        const session = await this.authRepo.getSession(refresh_tkn);
+        if (!session) throw new ApiError(401, "Invalid session");
+
+        const user = await this.userRepo.findById(session.userId);
+        if (new Date() > session.expiresAt || !user) {
+            await this.authRepo.deleteSession(refresh_tkn);
+            throw new ApiError(401, "Invalid session");
+        }
+        
+        const access_tkn = {
+            user_id: session.userId,
+            displayname: user.displayname,
+            username: user.username,
+            email: user.email,
+        }
+        const access_jwt = await new jose.SignJWT(access_tkn)
+            .setProtectedHeader({ alg: 'HS256' })
+            .setIssuedAt()
+            .setExpirationTime('1h')
+            .sign(await this.jwtSecret);
+
+        return {
+            user_id: session.userId.toString(),
+            access_token: access_jwt,
+            refresh_token: refresh_tkn,
+            expiresafter: 60 * 60 // hour
+        };
+    }
+
     public async initiateRegister(request: RegisterInput): Promise<RegisterResponse> {
         const username = request.username;
         const displayname = request.displayname ?? username;

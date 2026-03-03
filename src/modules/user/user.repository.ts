@@ -15,7 +15,7 @@ export default class UserRepository {
      * @param userid - the userid that we need to search for
      * @returns UserType or null depending on if the user exists
      */
-    public async findById(userid: string): Promise<UserType | null> {
+    public async findById(userid: string | ObjectId): Promise<UserType | null> {
         return this.mongo.findById<UserType>(this.userCollection, userid);
     }
 
