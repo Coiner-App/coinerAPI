@@ -24,10 +24,10 @@ export default class AuthController {
         let user: WithId<UserType>;
         if ('username' in request) {
             const username = request.username;
-            user = await this.loginByUsername(username, request.password);
+            user = await this.userByUsername(username, request.password);
         } else {
             const email = request.email;
-            user = await this.loginByEmail(email, request.password);
+            user = await this.userByEmail(email, request.password);
         }
 
         const user_id = user._id.toString();
@@ -68,14 +68,14 @@ export default class AuthController {
         }
     }
 
-    private async loginByUsername(username: string, password: string): Promise<WithId<UserType>> {
+    private async userByUsername(username: string, password: string): Promise<WithId<UserType>> {
         const user = await this.userRepo.findByUsername(username);
         if (!user) throw new ApiError(401, 'User not found.');
         if (!await AuthService.checkPassword(password, user.password)) throw new ApiError(401, 'Invalid password.');
         return user;
     }
 
-    private async loginByEmail(email: string, password: string): Promise<WithId<UserType>> {
+    private async userByEmail(email: string, password: string): Promise<WithId<UserType>> {
         const user = await this.userRepo.findByEmail(email);
         if (!user) throw new ApiError(401, 'User not found.');
         if (!await AuthService.checkPassword(password, user.password)) throw new ApiError(401, 'Invalid password.');
