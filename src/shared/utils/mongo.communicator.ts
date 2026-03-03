@@ -106,6 +106,13 @@ export default class MongoCommunicator {
         return result.deletedCount;
     }
 
+    /**
+     * Counts the number of documents in a collection that match a filter
+     * @async
+     * @param collectionName - The name of the collection to count documents in
+     * @param filter - The MongoDB filter query to apply
+     * @returns The count of matching documents
+     */
     public async count<T extends Document>(collectionName: string, filter: Filter<T>): Promise<number> {
         return this.db.collection<T>(collectionName).countDocuments(filter);
     }

@@ -128,6 +128,12 @@ export default class AuthRepository {
         return result;
     }
 
+    /**
+     * Deletes the oldest session for a user to enforce session limits
+     * @async
+     * @param user_id - The ObjectId of the user
+     * @returns A boolean indicating if a session was deleted
+     */
     public async deleteOldestSession(user_id: ObjectId): Promise<boolean> {
         const oldest = await this.mongo.db.collection(this.authKeyCollection)
             .findOneAndDelete({ userId: user_id }, { sort: { createdAt: 1 } });

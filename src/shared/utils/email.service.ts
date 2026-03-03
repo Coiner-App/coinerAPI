@@ -15,7 +15,10 @@ export default class EmailService {
     }
 
     /**
-     * TODO
+     * Sends a verification email containing a registration link to the user
+     * @async
+     * @param targetEmail - The recipient's email address
+     * @param finalurl - The full verification URL including the unique token
      */
     public async sendVerificationMail(targetEmail: string, finalurl: string) {
         try {
@@ -32,6 +35,12 @@ export default class EmailService {
         }
     }
 
+    /**
+     * Sends a welcome email to the user after successful registration
+     * @async
+     * @param targetEmail - The recipient's email address
+     * @returns A boolean indicating if the email was sent successfully
+     */
     public async sendWelcomeEmail(targetEmail: string): Promise<boolean> {
         try {
             const info = await this.transporter.sendMail({
