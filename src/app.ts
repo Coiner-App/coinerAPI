@@ -20,7 +20,7 @@ export async function buildApp() {
     // ENSURE WE ALWAYS HAVE UNIQUE EMAILS AND USERNAMES !!! //
     // We actually do not need to run this at every app.ts start,
     // but it will (should) be skipped if the index is already created
-    await db.collection('prending_users').createIndex({ email: 1 }, { unique: true });
+    await db.collection('pending_users').createIndex({ email: 1 }, { unique: true });
     await db.collection('pending_users').createIndex({ username: 1 }, { unique: true });
     await db.collection('users').createIndex({ email: 1 }, { unique: true });
     await db.collection('users').createIndex({ username: 1 }, { unique: true });

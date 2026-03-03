@@ -4,7 +4,7 @@ import MongoCommunicator from '../../shared/utils/mongo.communicator.js';
 
 export default class UserRepository {
     private readonly userCollection = 'users';
-    private readonly counterCollection = 'coutners';
+    private readonly counterCollection = 'counters';
 
     constructor(private readonly mongo: MongoCommunicator) {}
 
