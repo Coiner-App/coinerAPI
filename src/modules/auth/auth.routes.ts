@@ -36,6 +36,7 @@ export const AuthRoutes: FastifyPluginAsyncTypebox<AuthRouteOptions> = async (ap
         const devicemodel = typeof deviceHeader === 'string' ? deviceHeader.substring(0, 50).replace(/[<>]/g, '') : null;
         const reqinfo = { ip: request.ip, useragent: request.headers["user-agent"] ?? "", devicemodel};
         const loginres: LoginResponse = await authController.login(request.body, reqinfo);
+        reply.header("Set-Cookie", `refresh_token=${loginres.refresh_token}; HttpOnly; Secure; SameSite=Strict; Path=/auth/refresh; Max-Age=604800`);
         return reply.status(200).send(loginres);
     });
 

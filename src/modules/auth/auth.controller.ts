@@ -1,6 +1,5 @@
 import { ObjectId, type Db, type WithId } from "mongodb";
 import * as jose from "jose";
-import Bowser from "bowser";
 import type { LoginInput, LoginResponse, RegisterInput, RegisterResponse, VerifyResponse } from "./auth.schema.js";
 import AuthService from "./auth.service.js";
 import MongoCommunicator from "../../shared/utils/mongo.communicator.js";
