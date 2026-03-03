@@ -16,7 +16,7 @@ export const RefreshSchema = Type.Object({
 })
 
 export const RegisterSchema = Type.Object({
-    username: Type.String({ pattern: "/^[a-z0-9_]{3,16}$/igm" }),
+    username: Type.String({ pattern: "^[a-zA-Z0-9_]{3,16}$" }),
     displayname: Type.Optional(Type.String({ minLength: 3, maxLength: 32 })),
     email: Type.String({ format: 'email' }),
     password: Type.String({ minLength: 8, maxLength: 32 }),
