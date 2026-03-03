@@ -86,7 +86,7 @@ export const AuthRoutes: FastifyPluginAsyncTypebox<AuthRouteOptions> = async (ap
     app.post('/register', {
         schema: {
             body: RegisterSchema,
-            response: { type: 'object', data: RegisterResponseSchema }
+            response: { '2xx': { type: 'object', data: RegisterResponseSchema } }
         }
     }, async (request, reply) => {
         const controller = await authController.initiateRegister(request.body);

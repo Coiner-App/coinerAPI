@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { config } from '../../config/env.js';
 
 export default class EmailService {
     private transporter: nodemailer.Transporter;
@@ -7,8 +8,8 @@ export default class EmailService {
         this.transporter = nodemailer.createTransport({
             service: 'outlook',
             auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
+                user: config.emailUser,
+                pass: config.emailPass
             }
         });
         this.transporter.verify();
