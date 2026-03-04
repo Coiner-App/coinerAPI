@@ -69,8 +69,19 @@ export default class AuthService {
         return crypto.randomBytes(32).toString('hex');
     }
 
-    public static getBrowserInfo(ua: string): string {
+    public static getBrowserInfo(ua?: string): string {
+        if (!ua) return "Unknown Device";
+
         const browser = Bowser.getParser(ua);
-        return `${browser.getBrowserName(false)} ${browser.getBrowserVersion()} on ${browser.getPlatformType(false)}`;
+        const name = browser.getBrowserName(false);
+        const version = browser.getBrowserVersion();
+        const platform = browser.getPlatformType(false);
+
+        if (!name) return ua.substring(0, 50); 
+
+        const versionStr = version ? ` ${version}` : '';
+        const platformStr = platform ? ` on ${platform}` : '';
+        
+        return `${name}${versionStr}${platformStr}`.trim();
     }
 }
