@@ -5,13 +5,27 @@ export default class EmailService {
     private transporter: nodemailer.Transporter;
 
     constructor() {
-        this.transporter = nodemailer.createTransport({
-            service: 'outlook',
-            auth: {
-                user: config.emailUser,
-                pass: config.emailPass
-            }
-        });
+        if (config.isDev) {
+            this.transporter = nodemailer.createTransport({
+                host: 'smtp.resend.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: config.emailUser, 
+                    pass: config.emailPass  
+                }
+            });
+        } else {
+            this.transporter = nodemailer.createTransport({
+                host: 'smtp.resend.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: config.emailUser, 
+                    pass: config.emailPass  
+                }
+            });
+        }
         this.transporter.verify();
     }
 

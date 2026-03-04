@@ -5,8 +5,13 @@ import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import { Db, MongoClient } from "mongodb";
 import { config } from "./config/env.js";
 import EmailService from "./shared/utils/email.service.js";
+import { setServers } from "node:dns/promises";
 
 export async function buildApp() {
+    // DEV ENV SETUP //
+    if (config.isDev) {
+        setServers(["8.8.8.8", "1.1.1.1"]);
+    }
     // HELPER CLASSES SETUP //
     // Database
     const client = await MongoClient.connect(config.mongoUri);
