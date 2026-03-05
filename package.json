@@ -20,7 +20,7 @@
   "scripts": {
     "start": "node --env-file=.env dist/server.js",
     "build": "tsc",
-    "dev": "tsc && tsx --env-file=.env src/server.ts",
+    "dev": "tsx --env-file=.env src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
