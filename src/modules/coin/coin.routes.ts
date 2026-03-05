@@ -2,9 +2,12 @@ import { type FastifyPluginAsync } from "fastify";
 import { Type, type FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
 import CoinProvider from "./coin.provider.js"
 import { type CoinType, CoinSchema } from "./coin.schema.js";
+import { requireAuth } from "../auth/auth.prehandler.js";
 
 export const CoinRoutes: FastifyPluginAsyncTypebox = async (app, options) => {
     const coinProvider = new CoinProvider();
+
+    app.addHook('preHandler', requireAuth);
 
     /**
      * Request to get the coin objects of all supported Coiner crypto in an array.

@@ -37,8 +37,8 @@ export async function buildApp() {
     // SERVER SETUP //
     const app: FastifyInstance = fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>();
 
+    app.register(AuthRoutes, { prefix: '/auth', db, emailSerivce: emailService });
     app.register(CoinRoutes, { prefix: '/api' });
-    app.register(AuthRoutes, { prefix: '/api', db, emailSerivce: emailService });
 
     // DEFAULT TEST ENDPOINT //
     app.get('/', async (request, reply) => {
