@@ -12,13 +12,8 @@ export const CoinRoutes: FastifyPluginAsyncTypebox = async (app, options) => {
     /**
      * Request to get the coin objects of all supported Coiner crypto in an array.
      */
-    app.get<{ Reply: CoinType[] }>('/coin/all',
-        {
-            schema: {
-                response: {
-                    '2xx': { type: 'array', data: Type.Array(CoinSchema) }
-                },
-            },
+    app.get('/coin/all', {
+            schema: { response: { '2xx': Type.Array(CoinSchema) } },
         },
         async (request, reply) => {
             const res = await coinProvider.getAllCoinsData(['bitcoin', 'ethereum', 'dogecoin']);
@@ -26,15 +21,9 @@ export const CoinRoutes: FastifyPluginAsyncTypebox = async (app, options) => {
         }
     );
 
-    app.get('/coin/:coinid?', // optional so we can tell the users they need to use params
-        {
-            schema: {
-                params: Type.Object({
-                    coinid: Type.String({ minLength: 2, maxLength: 20 }),
-                })
-            }
-        },
-        async (request, reply) => {
+    app.get('/coin/:coinid?', { // optional so we can tell the users they need to use params
+            schema: { params: Type.Object({coinid: Type.String({ minLength: 2, maxLength: 20 })}) }
+        }, async (request, reply) => {
             const res = await coinProvider.getAllCoinsData([request.params.coinid]);
             if (!res || res.length == 0) return reply.status(404).send({ statusCode: 404, message: 'Coin not found or does not exist.' });
             if (res.length > 1) {

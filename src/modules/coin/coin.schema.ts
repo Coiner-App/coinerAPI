@@ -1,7 +1,7 @@
 import { Type, type Static } from 'typebox';
+import { supported_currencies } from '../fiat/fiat.schema.js';
 
 export const supported_coins: string[] = ['USDT', 'BTC', 'ETH', 'DOGE'] as const;
-export const supported_currencies: string[] = ['usd', 'eur', 'gbp', 'rub'] as const;
 
 export const PriceData = Type.Object({
     price: Type.Number(),
@@ -32,7 +32,7 @@ export const CoinSchema = Type.Object({
     symbol: Type.String(),
     description: Type.String(),
     pricedata: Type.Object(dynamicPriceObject),
-    lastUpdated: Type.String({ format: 'date-time' }), // STRING BASED TIME!! NEEDS RECHECKING
+    lastUpdated: Type.String({ format: 'date-time' }),
 });
 
 export type CoinType = Static<typeof CoinSchema>;

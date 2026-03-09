@@ -72,6 +72,7 @@ export default class CoinProvider {
 
             return coins;
         } catch (error) {
+            console.error(error);
             throw new ApiError(502, "Could not retrieve coin data at this time.");
         }
     }

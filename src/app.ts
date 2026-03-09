@@ -6,6 +6,7 @@ import { Db, MongoClient } from "mongodb";
 import { config } from "./config/env.js";
 import EmailService from "./shared/utils/email.service.js";
 import { setServers } from "node:dns/promises";
+import FiatProvider from "./modules/fiat/fiat.provider.js";
 
 export async function buildApp() {
     // DEV ENV SETUP //
