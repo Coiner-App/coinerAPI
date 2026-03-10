@@ -1,7 +1,13 @@
 import { Type, type Static } from 'typebox';
-import { supported_currencies } from '../fiat/fiat.schema.js';
+import { CurrencyKeySchema } from '../fiat/fiat.schema.js';
 
-export const supported_coins: string[] = ['USDT', 'BTC', 'ETH', 'DOGE'] as const;
+export const CryptoKeySchema = Type.Union([
+    Type.Literal('bitcoin'),
+    Type.Literal('ethereum'),
+    Type.Literal('dogecoin'),
+    Type.Literal('tether')
+]);
+export type SupportedCoins = Static<typeof CryptoKeySchema>;
 
 export const PriceData = Type.Object({
     price: Type.Number(),
@@ -17,13 +23,6 @@ export const PriceData = Type.Object({
 
 export type PriceDataType = Static<typeof PriceData>;
 
-const dynamicPriceObject = Object.fromEntries(
-    supported_currencies.map(currency => [
-        currency,
-        Type.Optional(PriceData),
-    ])
-);
-
 export const CoinSchema = Type.Object({
     geckoid: Type.String(),
     marketrank: Type.Number(),
@@ -31,7 +30,7 @@ export const CoinSchema = Type.Object({
     slug: Type.String(),
     symbol: Type.String(),
     description: Type.String(),
-    pricedata: Type.Object(dynamicPriceObject),
+    pricedata: Type.Partial(Type.Record(CurrencyKeySchema, PriceData), { minProperties: 1 }),
     lastUpdated: Type.String({ format: 'date-time' }),
 });
 

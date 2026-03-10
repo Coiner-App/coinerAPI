@@ -63,4 +63,13 @@ export default class UserRepository {
         );
         return result!.seq;
     }
+
+    /**
+     * Gets the users asset portfolio
+     * @async
+     * @returns - returns
+     */
+    public async getUserPortfolio(userid: string | ObjectId) {
+        throw Error('Not implemented');
+    }
 }

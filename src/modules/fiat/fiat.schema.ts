@@ -1,6 +1,5 @@
 import { Type, type Static } from 'typebox';
 
-export const supported_currencies: string[] = ['usd', 'eur', 'gbp', 'rub'] as const;
 export const CurrencyKeySchema = Type.Union([
     Type.Literal('usd'),
     Type.Literal('eur'),
