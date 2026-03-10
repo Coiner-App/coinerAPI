@@ -13,17 +13,17 @@ export default class CoinProvider {
      * @param {string} currency - The currency from the GeckoCoin market API call
      **/
     private mapGeckoToCoin(raw: any, currency: string): CoinType {
-        const getPriceData = (): PriceDataType => ({
-            price: (raw.current_price as number) || 0,
-            marketcap: (raw.market_cap as number) || 0,
-            volume: (raw.total_volume as number) || 0,
-            change24h: (raw.price_change_percentage_24h_in_currency as number) || 0,
-            change7d: (raw.price_change_percentage_7d_in_currency as number) || 0,
-            change30d: (raw.price_change_percentage_30d_in_currency as number) || 0,
-            change1y: (raw.price_change_percentage_1y_in_currency as number) || 0,
-            ath: (raw.ath as number) || 0,
-            atl: (raw.atl as number) || 0
-        });
+        const getPriceData: PriceDataType = {
+            price: (raw.current_price as number) ?? 0,
+            marketcap: (raw.market_cap as number) ?? 0,
+            volume: (raw.total_volume as number) ?? 0,
+            change24h: (raw.price_change_percentage_24h_in_currency as number) ?? 0,
+            change7d: (raw.price_change_percentage_7d_in_currency as number) ?? 0,
+            change30d: (raw.price_change_percentage_30d_in_currency as number) ?? 0,
+            change1y: (raw.price_change_percentage_1y_in_currency as number) ?? 0,
+            ath: (raw.ath as number) ?? 0,
+            atl: (raw.atl as number) ?? 0
+        };
 
         return {
             geckoid: raw.id,
@@ -33,9 +33,9 @@ export default class CoinProvider {
             symbol: raw.symbol?.toUpperCase(),
             description: raw.description || '',
             pricedata: {
-                [currency]: getPriceData(),
+                [currency]: getPriceData,
             },
-            lastUpdated: new Date(raw.last_updated || Date.now()).toUTCString(),
+            lastUpdated: new Date(raw.last_updated || Date.now()).toISOString(),
         };
     }
 
@@ -59,20 +59,15 @@ export default class CoinProvider {
                 }
             });
 
-            if (response.status != 200) {
-                console.error(response.data);
-                throw new ApiError(502, "Could not retrieve coin data at this time.");
-            }
-
             const data = response.data as unknown[];
             const coins: CoinType[] = [];
-            for (const coin of data) {
+            data.map(coin => {
                 coins.push(this.mapGeckoToCoin(coin, 'usd'));
-            }
+            });
 
             return coins;
         } catch (error) {
-            console.error(error);
+            console.error("Coin Provider Error:", error);
             throw new ApiError(502, "Could not retrieve coin data at this time.");
         }
     }
