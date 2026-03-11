@@ -1,12 +1,14 @@
 import { Type, type Static } from 'typebox';
 import { CurrencyKeySchema } from '../fiat/fiat.schema.js';
 
-export const CryptoKeySchema = Type.Union([
-    Type.Literal('bitcoin'),
-    Type.Literal('ethereum'),
-    Type.Literal('dogecoin'),
-    Type.Literal('tether')
-]);
+// errrrrr... it works
+export const CoinRegistrySchema = Type.Object({
+    USDT: Type.Literal('tether'),
+    BTC: Type.Literal('bitcoin'),
+    ETH: Type.Literal('ethereum'),
+    DOGE: Type.Literal('dogecoin')
+});
+export const CryptoKeySchema = Type.KeyOf(CoinRegistrySchema);
 export type SupportedCoins = Static<typeof CryptoKeySchema>;
 
 export const PriceData = Type.Object({

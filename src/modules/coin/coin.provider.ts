@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { config } from '../../config/env.js';
-import { type CoinType, type PriceDataType } from './coin.schema.js';
+import { type CoinType, type PriceDataType, CoinRegistrySchema, CryptoKeySchema } from './coin.schema.js';
 import { ApiError } from '../../shared/errors.js';
 
 export default class CoinProvider {
-
     private readonly baseUrl = 'https://api.coingecko.com/api/v3';
 
     /**
@@ -39,7 +38,8 @@ export default class CoinProvider {
         };
     }
 
-    public async getAllCoinsData(coinIds: string[]): Promise<CoinType[]> {
+    public async getCoinsData(coinIds: string[]): Promise<CoinType[]> {
+        console.log("Getting some coins");
         if (coinIds.length == 0 || coinIds[0] == '') throw new Error("No coins provided!");
         try {
             const response = await axios.get(`${this.baseUrl}/coins/markets`, {
@@ -64,6 +64,37 @@ export default class CoinProvider {
             data.map(coin => {
                 coins.push(this.mapGeckoToCoin(coin, 'usd'));
             });
+
+            return coins;
+        } catch (error) {
+            console.error("Coin Provider Error:", error);
+            throw new ApiError(502, "Could not retrieve coin data at this time.");
+        }
+    }
+
+    public async getAllCoinsData(): Promise<CoinType[]> {
+        console.log("Getting all coins");
+        const allCoins = Object.values(CoinRegistrySchema.properties).map(coin => coin.const);
+        try {
+            const response = await axios.get(`${this.baseUrl}/coins/markets`, {
+                headers: {
+                    'x-cg-demo-api-key': config.geckoKey
+                },
+                params: {
+                    locale: 'en',
+                    precision: 2,
+                    order: 'market_cap_desc',
+                    per_page: 100,
+                    page: 1,
+                    sparkline: true,
+                    ids: allCoins.join(','),
+                    vs_currency: 'usd',
+                    price_change_percentage: '1h,24h,7d,30d,1y'
+                }
+            });
+
+            const data = response.data as unknown[];
+            const coins: CoinType[] = data.map(coin => this.mapGeckoToCoin(coin, 'usd'));
 
             return coins;
         } catch (error) {

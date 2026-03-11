@@ -57,6 +57,14 @@ export class LRUCache {
         return structuredClone(item) as T;
     }
 
+    public getAll<T = any>(): Map<string, T> {
+        const result = new Map<string, T>();
+        for (const [key, item] of this.cache.entries()) {
+            result.set(key, structuredClone(item.data) as T);
+        }
+        return result;
+    }
+
     public set(key: string, value: any): void {
         if (this.cache.has(key)) {
             this.cache.delete(key);
