@@ -2,7 +2,7 @@ import { CoinRegistrySchema, type CoinType, type SupportedCoins } from './coin.s
 import CoinProvider from './coin.provider.js';
 import { TLLCache } from '../../shared/data.cache.js';
 
-export default class CoinController {
+export default class CoinRepository {
     private readonly cache: TLLCache;
 
     constructor(private readonly coinProvider: CoinProvider) {
