@@ -53,7 +53,7 @@ export default class AuthService {
             tagLength: 32,
         }
         
-        const attemptHash = await new Promise<Buffer>((resolve, reject) => {
+        const attemptHash = await new Promise<Buffer>((resolve, reject) => { // avoid callbacks and promisify
                 crypto.argon2('argon2id', params, (err, derivedKey) => {
                     if (err) reject(err);
                     else resolve(derivedKey);
@@ -65,7 +65,7 @@ export default class AuthService {
         return crypto.timingSafeEqual(attemptHash, orighash);
     }
 
-    public static readonly generateVerificationKey = async () => {
+    public static readonly generateVerificationKey = () => {
         return crypto.randomBytes(32).toString('hex');
     }
 

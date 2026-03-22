@@ -6,8 +6,7 @@ import { requireAuth } from "../auth/auth.prehandler.js";
 import CoinRepository from "./coin.repository.js";
 
 export const CoinRoutes: FastifyPluginAsyncTypebox = async (app, options) => {
-    const coinProvider = new CoinProvider();
-    const coinController = new CoinRepository(coinProvider);
+    const coinRepository = app.coinRepository;
 
     app.addHook('preHandler', requireAuth);
 
@@ -18,15 +17,15 @@ export const CoinRoutes: FastifyPluginAsyncTypebox = async (app, options) => {
             schema: { response: { '2xx': Type.Array(CoinSchema) } },
         },
         async (request, reply) => {
-            const res: CoinType[] = await coinController.getAllCoinData();
+            const res: CoinType[] = await coinRepository.getAllCoinData();
             return res;
         }
     );
 
-    app.get('/coin/:coinid', { // optional so we can tell the users they need to use params
+    app.get('/coin/:coinid', {
             schema: { params: Type.Object({coinid: CryptoKeySchema}) }
         }, async (request, reply) => {
-            const res: CoinType[] = await coinController.getCoinData([request.params.coinid]);
+            const res: CoinType[] = await coinRepository.getCoinData([request.params.coinid]);
             if (!res || res.length == 0) return reply.status(404).send({ statusCode: 404, message: 'Coin not found or does not exist.' });
             if (res.length > 1) {
                 return res;
@@ -47,7 +46,7 @@ export const CoinRoutes: FastifyPluginAsyncTypebox = async (app, options) => {
             return reply.status(404).send({ statusCode: 404, message: 'Coin not found or does not exist.' });
         if (requested.some(s => !allowedKeys.includes(s)))
             return reply.status(400).send({ statusCode: 400, message: `Invalid symbols provided. Supported are: ${allowedKeys.join(', ')}`});
-        const res = await coinController.getCoinData(requested as SupportedCoins[]);
+        const res = await coinRepository.getCoinData(requested as SupportedCoins[]);
         if (!res || res.length == 0) return reply.status(404).send({ statusCode: 404, message: 'Coin not found or does not exist.' });
         return res;
     });

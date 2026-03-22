@@ -3,16 +3,18 @@ import * as jose from 'jose';
 import { config } from '../../config/env.js';
 import { ApiError } from '../../shared/errors.js';
 
-type AuthPayload = {
+export type AuthPayload = {
     user_id: string;
     email: string;
     username: string;
-    displayname?: string;
+    displayname: string;
 }
 
-export type AuthFastifyRequest = FastifyRequest & {
-    user: AuthPayload;
-};
+declare module 'fastify' {
+    interface FastifyRequest {
+        user: AuthPayload;
+    }
+}
 
 export const requireAuth = async (request: FastifyRequest, reply: FastifyReply) => {
     const authHeader = request.headers.authorization;
@@ -28,7 +30,7 @@ export const requireAuth = async (request: FastifyRequest, reply: FastifyReply) 
         const secretKey = await jose.importJWK(config.jwkSecret);
         const { payload } = await jose.jwtVerify<AuthPayload>(token, secretKey);
 
-        (request as AuthFastifyRequest).user = {
+        request.user = {
             user_id: payload.user_id,
             email: payload.email,
             username: payload.username,

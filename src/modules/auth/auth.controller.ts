@@ -133,7 +133,7 @@ export default class AuthController {
         if (await this.authRepo.findPendingByEmail(email)) return { code: 409, message: 'Registration already in progress.' }
 
         const salt = await AuthService.saltPassword(password);
-        const verificationToken = await AuthService.generateVerificationKey();
+        const verificationToken = AuthService.generateVerificationKey();
 
         const pendingusr: PendingUser = {
             displayname,

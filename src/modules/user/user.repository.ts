@@ -1,5 +1,5 @@
 import { ObjectId, type WithId } from 'mongodb';
-import type { UserType } from './user.schema.js';
+import type { UserCoinPortfolioType, UserType } from './user.schema.js';
 import MongoCommunicator from '../../shared/utils/mongo.communicator.js';
 
 export default class UserRepository {
@@ -69,7 +69,10 @@ export default class UserRepository {
      * @async
      * @returns - returns
      */
-    public async getUserPortfolio(userid: string | ObjectId) {
-        throw Error('Not implemented');
+    public async getUserPortfolio(userid: string | ObjectId): Promise<UserCoinPortfolioType | null> {
+        const user = await this.findById(userid);
+        if (!user) return null;
+        const portfolio: UserCoinPortfolioType = user.coins;
+        return portfolio;
     }
 }

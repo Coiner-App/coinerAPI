@@ -5,8 +5,10 @@ import type { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
 import { Db, MongoClient } from "mongodb";
 import { config } from "./config/env.js";
 import EmailService from "./shared/utils/email.service.js";
+import { DataPlugin } from "./shared/data.plugin.js";
 import { setServers } from "node:dns/promises";
-import FiatProvider from "./modules/fiat/fiat.provider.js";
+import { PortfolioRoutes } from "./modules/portfolio/portfolio.routes.js";
+import type { AuthPayload } from "./modules/auth/auth.prehandler.js";
 
 export async function buildApp() {
     // DEV ENV SETUP //
@@ -37,9 +39,13 @@ export async function buildApp() {
 
     // SERVER SETUP //
     const app: FastifyInstance = fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>();
+    app.decorateRequest('user', null as unknown as AuthPayload);
 
-    app.register(AuthRoutes, { prefix: '/auth', db, emailSerivce: emailService });
+    app.register(DataPlugin, { db, emailService });
+    
+    app.register(AuthRoutes, { prefix: '/auth' });
     app.register(CoinRoutes, { prefix: '/api' });
+    app.register(PortfolioRoutes, { prefix: '/api' });
 
     // DEFAULT TEST ENDPOINT //
     app.get('/', async (request, reply) => {

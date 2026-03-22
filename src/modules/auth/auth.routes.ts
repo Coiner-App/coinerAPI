@@ -8,22 +8,16 @@ import EmailService from "../../shared/utils/email.service.js";
 import UserRepository from "../user/user.repository.js";
 import AuthRepository from "./auth.repository.js";
 
-export interface AuthRouteOptions {
-    db: Db;
-    emailSerivce: EmailService;
-}
-
-export const AuthRoutes: FastifyPluginAsyncTypebox<AuthRouteOptions> = async (app, options) => {
+export const AuthRoutes: FastifyPluginAsyncTypebox = async (app, options) => {
     // Setup route-wide components
-    const db = options.db;
-    const mongoCom = new MongoCommunicator(db);
-
+    const mongoCom = app.mongoCommunicator;
+    
     // Repositories
+    const userRepo = app.userRepository;
     const authRepo = new AuthRepository(mongoCom);
-    const userRepo = new UserRepository(mongoCom);
 
     // Controllers
-    const authController = new AuthController(authRepo, userRepo, mongoCom, options.emailSerivce);
+    const authController = new AuthController(authRepo, userRepo, mongoCom, app.emailService);
 
     // Routes
     app.post('/login', {
