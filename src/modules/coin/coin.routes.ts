@@ -1,9 +1,6 @@
-import { type FastifyPluginAsync } from "fastify";
 import { Type, type FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
-import CoinProvider from "./coin.provider.js"
 import { type CoinType, type SupportedCoins, CoinRegistrySchema, CoinSchema, CryptoKeySchema } from "./coin.schema.js";
 import { requireAuth } from "../auth/auth.prehandler.js";
-import CoinRepository from "./coin.repository.js";
 
 export const CoinRoutes: FastifyPluginAsyncTypebox = async (app, options) => {
     const coinRepository = app.coinRepository;

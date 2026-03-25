@@ -1,11 +1,6 @@
-import { type FastifyPluginAsync } from "fastify";
 import { Type, type FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox'
-import type { Db } from 'mongodb'
-import { LoginResponseSchema, LoginSchema, RefreshSchema, RegisterResponseSchema, RegisterSchema, VerifyInput, type LoginInput, type LoginResponse } from "./auth.schema.js";
+import { LoginResponseSchema, LoginSchema, RefreshSchema, RegisterResponseSchema, RegisterSchema, VerifyInput, type LoginResponse } from "./auth.schema.js";
 import AuthController from "./auth.controller.js";
-import MongoCommunicator from "../../shared/utils/mongo.communicator.js";
-import EmailService from "../../shared/utils/email.service.js";
-import UserRepository from "../user/user.repository.js";
 import AuthRepository from "./auth.repository.js";
 
 export const AuthRoutes: FastifyPluginAsyncTypebox = async (app, options) => {
