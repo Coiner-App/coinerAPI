@@ -1,5 +1,4 @@
 import { Db, MongoClient, ObjectId, type Document, type Filter, type OptionalUnlessRequiredId, type WithId, type WithoutId, type InferIdType, type DeleteOptions } from 'mongodb';
-import type { UserType } from '../../modules/user/user.schema.js';
 
 export default class MongoCommunicator {
     constructor(public readonly db: Db){};

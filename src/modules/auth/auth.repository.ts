@@ -1,6 +1,7 @@
 import { ObjectId, type Db, type InferIdType, type WithId } from 'mongodb';
 import MongoCommunicator from '../../shared/utils/mongo.communicator.js';
 import type { RegisterInput } from './auth.schema.js';
+import { Collections } from '../../shared/db.collections.js';
 
 export interface PendingUser extends RegisterInput {
     createdAt: Date;
@@ -17,8 +18,8 @@ export interface UserSession {
 }
 
 export default class AuthRepository {
-    private readonly pendingCollection = 'pending_users';
-    private readonly authKeyCollection = 'sessions';
+    private readonly pendingCollection = Collections.PENDING_USERS;
+    private readonly authKeyCollection = Collections.SESSIONS;
 
     constructor(private readonly mongo: MongoCommunicator) {}
 

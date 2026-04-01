@@ -1,10 +1,11 @@
 import { ObjectId, type WithId } from 'mongodb';
 import type { UserCoinPortfolioType, UserType } from './user.schema.js';
 import MongoCommunicator from '../../shared/utils/mongo.communicator.js';
+import { Collections } from '../../shared/db.collections.js';
 
 export default class UserRepository {
-    private readonly userCollection = 'users';
-    private readonly counterCollection = 'counters';
+    private readonly userCollection = Collections.USERS;
+    private readonly counterCollection = Collections.COUNTERS;
 
     constructor(private readonly mongo: MongoCommunicator) {}
 

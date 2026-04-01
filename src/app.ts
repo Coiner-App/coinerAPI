@@ -9,6 +9,7 @@ import { DataPlugin } from "./shared/data.plugin.js";
 import { setServers } from "node:dns/promises";
 import { PortfolioRoutes } from "./modules/portfolio/portfolio.routes.js";
 import type { AuthPayload } from "./modules/auth/auth.prehandler.js";
+import { TradeRoutes } from "./modules/trade/trade.routes.js";
 
 export async function buildApp() {
     // DEV ENV SETUP //
@@ -46,6 +47,7 @@ export async function buildApp() {
     app.register(AuthRoutes, { prefix: '/auth' });
     app.register(CoinRoutes, { prefix: '/api' });
     app.register(PortfolioRoutes, { prefix: '/api' });
+    app.register(TradeRoutes, { prefix: '/api' });
 
     // DEFAULT TEST ENDPOINT //
     app.get('/', async (request, reply) => {
