@@ -7,6 +7,11 @@ export default class FiatProvider {
     private readonly baseUrl = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1";
     private readonly backupUrl = "https://latest.currency-api.pages.dev/v1";
 
+    /**
+     * Gets rates from a specified currency, from the fiat api
+     * @param base - what currency to convert from
+     * @returns An object containing the rates from the currency specified to all supported ones
+     */
     public async getRates(base: SupportedCurrency = 'usd'): Promise<Record<string, number>> {
         try {
             const endpoint = `/currencies/${base}.json`;
@@ -22,6 +27,12 @@ export default class FiatProvider {
         }
     }
 
+    /**
+     * Maps fiat exchange object to [FiatRateType]
+     * @param data
+     * @param from 
+     * @returns FiatRateType
+     */
     private static mapExchangeToType(data: any, from: SupportedCurrency): FiatRateType {
         return {
             date: data.date,
@@ -31,6 +42,9 @@ export default class FiatProvider {
         }
     }
 
+    /**
+     * currently unused convert function, converts from one currency to another using the fiat rate api
+     */
     public async convert(from: SupportedCurrency, to: SupportedCurrency, amount: number): Promise<FiatConversionType> {
         if (from == to) return { amount, from, to, result: amount, rate: 1, date: new Date().toISOString() };
         try {

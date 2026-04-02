@@ -38,8 +38,12 @@ export default class CoinProvider {
         };
     }
 
+    /**
+     * Takes an array of coin ids and retrieves their information and price data from the crypto api
+     * @param coinIds - an array of the coin ids that should be retrieved
+     * @returns A cointype array containing the requested coins with their prices in USD
+     */
     public async getCoinsData(coinIds: string[]): Promise<CoinType[]> {
-        console.log("Getting some coins");
         if (coinIds.length == 0 || coinIds[0] == '') throw new Error("No coins provided!");
         try {
             const response = await axios.get(`${this.baseUrl}/coins/markets`, {
@@ -72,8 +76,12 @@ export default class CoinProvider {
         }
     }
 
+    /**
+     * Gets all supported coins from the Crypto API
+     * @async
+     * @returns CoinType[] array containing all supported coins
+     */
     public async getAllCoinsData(): Promise<CoinType[]> {
-        console.log("Getting all coins");
         const allCoins = Object.values(CoinRegistrySchema.properties).map(coin => coin.const);
         try {
             const response = await axios.get(`${this.baseUrl}/coins/markets`, {

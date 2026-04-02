@@ -12,6 +12,8 @@ export default class CoinRepository {
 
     /**
      * Retrieves data for an array of coins, using cache if available
+     * @param coins - An array of supported coins to retrieve
+     * @returns CoinType array containing coin data
      */
     public async getCoinData(coins: SupportedCoins[]): Promise<CoinType[]> {
         if (coins.length === 0) return [];

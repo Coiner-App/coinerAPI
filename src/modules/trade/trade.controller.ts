@@ -4,11 +4,20 @@ import type { SupportedCoins } from "../coin/coin.schema.js";
 import FiatRepository from "../fiat/fiat.repository.js";
 import UserRepository from "../user/user.repository.js";
 import type TradeRepository from "./trade.repository.js";
+import type { TransactionType } from "./trade.schema.js";
 
 export default class TradeController {
     constructor(private readonly userRepository: UserRepository, private readonly tradeRepository: TradeRepository, private readonly coinRepository: CoinRepository) {}
 
-    public async swapCrypto(userid: string, fromAsset: SupportedCoins, toAsset: SupportedCoins, amount: number) {
+    /**
+     * 
+     * @param userid - The ID of the user performing the trade
+     * @param fromAsset - The symbol of the asset being sold
+     * @param toAsset - The symbol of the asset being bought
+     * @param amount - Amount of [fromAsset] being sold
+     * @returns TransactionType containing the transaction information
+     */
+    public async swapCrypto(userid: string, fromAsset: SupportedCoins, toAsset: SupportedCoins, amount: number): Promise<TransactionType> {
         const coinData = await this.coinRepository.getCoinData([fromAsset, toAsset]);
         if (!coinData) throw new ApiError(404, 'Coin not found');
 

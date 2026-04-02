@@ -20,7 +20,8 @@ export default class TradeRepository {
      * @param toAsset - The symbol of the asset being bought
      * @param sellAmount - The amount to subtract from fromAsset
      * @param buyAmount - The amount to add to toAsset
-     * @returns Boolean indicating if the update was successful
+     * @param [fee=buyAmount * 0.01] - The fee to deduct from the bought crypto
+     * @returns A TransactionType if the swap was successful
      */
     public async executeSwap(userId: string | ObjectId, fromAsset: SupportedCoins, toAsset: SupportedCoins, sellAmount: number, buyAmount: number, fee: number = buyAmount * 0.01): Promise<TransactionType> {
         const user = typeof userId === 'string' ? new ObjectId(userId) : userId
@@ -45,6 +46,16 @@ export default class TradeRepository {
         return this.saveTransaction(userId, fromAsset, toAsset, sellAmount, buyAmount, fee);
     }
 
+    /**
+     * Saves the a transaction to the database
+     * @param userId - The ID of the user performing the trade
+     * @param fromAsset - The symbol of the asset sold
+     * @param toAsset - The symbol of the asset bought
+     * @param sellAmount - The amount subtracted from fromAsset
+     * @param buyAmount - The amount added to toAsset
+     * @param fee - The fee deducted from the bought crypto
+     * @returns A transactiontype showing the transaction info
+     */
     public async saveTransaction(userId: string | ObjectId, fromAsset: SupportedCoins, toAsset: SupportedCoins, sellAmount: number, buyAmount: number, fee: number): Promise<TransactionType> {
         const transactionDb = {
             userId: typeof userId === 'string' ? new ObjectId(userId) : userId,

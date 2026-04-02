@@ -9,6 +9,12 @@ export default class FiatRepository {
         this.cache = new TLLCache(100, 7200000) // 2 hours
     }
 
+    /**
+     * Gets the rate of 2 currencies from cache if available.
+     * @param to - the currency to convert the currency set on **from** to
+     * @param from - the currency you are converting from
+     * @returns the rate in **number**
+     */
     public async getRate(to: SupportedCurrency, from: SupportedCurrency = 'usd'): Promise<number> {
         if (from == to) return 1;
         let rates = this.cache.get<Record<string, number>>(from);
@@ -17,6 +23,11 @@ export default class FiatRepository {
         return rates[to];
     }
 
+    /**
+     * Refreshes all rates from the fiat api
+     * @param from - from what currency to refresh all the rates to
+     * @returns An object of the rates
+     */
     public async refreshAllRates(from: SupportedCurrency): Promise<Record<string, number>> {
         const rates = await this.fiatProvider.getRates(from);
         this.cache.set(from, rates, 7200);
