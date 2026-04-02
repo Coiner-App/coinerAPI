@@ -10,6 +10,7 @@ import { setServers } from "node:dns/promises";
 import { PortfolioRoutes } from "./modules/portfolio/portfolio.routes.js";
 import type { AuthPayload } from "./modules/auth/auth.prehandler.js";
 import { TradeRoutes } from "./modules/trade/trade.routes.js";
+import { UserRoutes } from "./modules/user/user.routes.js";
 
 export async function buildApp() {
     // DEV ENV SETUP //
@@ -45,6 +46,7 @@ export async function buildApp() {
     app.register(DataPlugin, { db, emailService });
     
     app.register(AuthRoutes, { prefix: '/auth' });
+    app.register(UserRoutes, { prefix: '/api/user' });
     app.register(CoinRoutes, { prefix: '/api' });
     app.register(PortfolioRoutes, { prefix: '/api' });
     app.register(TradeRoutes, { prefix: '/api' });

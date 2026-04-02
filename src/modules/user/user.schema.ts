@@ -6,6 +6,7 @@ export type UserCoinPortfolioType = Static<typeof UserCoinPortfolioSchema>;
 
 
 export const UserSchema = Type.Object({
+    _id: Type.Optional(Type.String()),
     publicid: Type.Integer(),
     username: Type.String({ minLength: 3, maxLength: 16 }),
     displayname: Type.String({ minLength: 2, maxLength: 32 }),
