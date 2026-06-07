@@ -11,11 +11,14 @@ import { PortfolioRoutes } from "./modules/portfolio/portfolio.routes.js";
 import type { AuthPayload } from "./modules/auth/auth.prehandler.js";
 import { TradeRoutes } from "./modules/trade/trade.routes.js";
 import { UserRoutes } from "./modules/user/user.routes.js";
+import { devCorsPlugin } from "./shared/cors.plugin.js";
 
 export async function buildApp() {
+    const app: FastifyInstance = fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>();
     // DEV ENV SETUP //
     if (config.isDev) {
         setServers(["8.8.8.8", "1.1.1.1"]);
+        app.register(devCorsPlugin);
     }
     // HELPER CLASSES SETUP //
     // Database
@@ -40,7 +43,6 @@ export async function buildApp() {
     const emailService: EmailService = new EmailService();
 
     // SERVER SETUP //
-    const app: FastifyInstance = fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>();
     app.decorateRequest('user', null as unknown as AuthPayload);
 
     app.register(DataPlugin, { db, emailService });
