@@ -30,7 +30,7 @@ export default class AuthController {
             user = await this.userByEmail(email, request.password);
         }
 
-        const user_obj_id: ObjectId = MongoCommunicator.stringToMongoId(user._id);
+        const user_obj_id: ObjectId = user._id;
         const user_id: string = user_obj_id.toString();
         const access_tkn = {
             user_id,
@@ -95,7 +95,7 @@ export default class AuthController {
             throw new ApiError(401, "Invalid session");
         }
 
-        const user_id = MongoCommunicator.stringToMongoId(session.userId).toString();
+        const user_id = session.userId.toString();
         
         const access_tkn = {
             user_id,
@@ -180,7 +180,7 @@ export default class AuthController {
                 privatemail: true,
                 verified: false
             });
-            return { code: 201, message: "Registered successfully", user_id: user instanceof ObjectId ? user.toString() : user}
+            return { code: 201, message: "Registered successfully", user_id: user.toString() }
         } catch (error: any) {
             if (error.code === 11000) {
                 return { code: 409, message: 'User already exists!', user_id: "-1" };

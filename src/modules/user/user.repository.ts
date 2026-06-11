@@ -1,5 +1,5 @@
 import { ObjectId, type WithId } from 'mongodb';
-import type { UserCoinPortfolioType, UserType } from './user.schema.js';
+import type { UserBase, UserCoinPortfolioType, UserResponse, UserType } from './user.schema.js';
 import MongoCommunicator from '../../shared/utils/mongo.communicator.js';
 import { Collections } from '../../shared/db.collections.js';
 
@@ -8,6 +8,20 @@ export default class UserRepository {
     private readonly counterCollection = Collections.COUNTERS;
 
     constructor(private readonly mongo: MongoCommunicator) {}
+
+    /**
+     * converts the DTO UserType object a UserResponse suitable for protected (accessible only to the user himself) endpoints
+     * @async
+     * @param user - UserType of the user being converted
+     * @returns A cleansed UserResponse
+     */
+    public static toProtected(user: UserType): UserResponse {
+        const { _id, password, ...publicUser } = user;
+        return {
+            _id: _id.toString(),
+            ...publicUser
+        }
+    }
 
     /**
      * finds a single user from the database collection and internal id given in parameters
@@ -46,8 +60,8 @@ export default class UserRepository {
      * @param user - The user data object to be stored
      * @returns The ID of the newly created user document
      */
-    public async createUser(user: UserType): Promise<string | ObjectId> {
-        return this.mongo.insert<UserType>(this.userCollection, user);
+    public async createUser(user: UserBase): Promise<ObjectId> {
+        return this.mongo.insert<UserBase>(this.userCollection, user);
     }
 
     /***
