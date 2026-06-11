@@ -56,7 +56,7 @@ export default class MongoCommunicator {
      */
     public async findById<T extends Document>(collectionName: string, id: InferIdType<T> | string): Promise<WithId<T> | null> {
         if (!ObjectId.isValid(id)) return null;
-        const queryId = typeof id === 'string' ? new ObjectId(id) : id;
+        const queryId = MongoCommunicator.stringToMongoId(id);
         return this.db.collection<T>(collectionName).findOne({ _id: queryId } as Filter<T>);
         // Typescript would not shut up about { _id: id } not matching the type Filter,
         // this is impossible so solve without casting our check object because T is a generic,
@@ -87,7 +87,7 @@ export default class MongoCommunicator {
      */
     public async deleteById<T extends Document>(collectionName: string, id: InferIdType<T> | string): Promise<boolean> {
         if (!ObjectId.isValid(id)) return false;
-        const queryId = typeof id === 'string' ? new ObjectId(id) : id;
+        const queryId = MongoCommunicator.stringToMongoId(id);
         const result = await this.db.collection<T>(collectionName).deleteOne({ _id: queryId } as Filter<T>);
         // Luckily the cast is safe because _id is guaranteed to exist and we verify id
         return result.deletedCount === 1;
@@ -114,5 +114,9 @@ export default class MongoCommunicator {
      */
     public async count<T extends Document>(collectionName: string, filter: Filter<T>): Promise<number> {
         return this.db.collection<T>(collectionName).countDocuments(filter);
+    }
+
+    public static stringToMongoId = (id: string | ObjectId) => {
+        return typeof id === 'string' ? new ObjectId(id) : id;
     }
 }

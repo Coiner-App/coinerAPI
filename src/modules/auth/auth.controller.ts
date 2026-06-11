@@ -30,7 +30,7 @@ export default class AuthController {
             user = await this.userByEmail(email, request.password);
         }
 
-        const user_obj_id: ObjectId = typeof user._id === 'string' ? new ObjectId(user._id) : user._id;
+        const user_obj_id: ObjectId = MongoCommunicator.stringToMongoId(user._id);
         const user_id: string = user_obj_id.toString();
         const access_tkn = {
             user_id,
@@ -94,9 +94,11 @@ export default class AuthController {
             await this.authRepo.deleteSession(refresh_tkn);
             throw new ApiError(401, "Invalid session");
         }
+
+        const user_id = MongoCommunicator.stringToMongoId(session.userId).toString();
         
         const access_tkn = {
-            user_id: session.userId,
+            user_id,
             displayname: user.displayname,
             username: user.username,
             email: user.email,
@@ -108,7 +110,7 @@ export default class AuthController {
             .sign(await this.jwtSecret);
 
         return {
-            user_id: session.userId.toString(),
+            user_id,
             access_token: access_jwt,
             refresh_token: refresh_tkn,
             expiresafter: 60 * 60 // hour
