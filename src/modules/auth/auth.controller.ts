@@ -30,7 +30,8 @@ export default class AuthController {
             user = await this.userByEmail(email, request.password);
         }
 
-        const user_id = user._id.toString();
+        const user_obj_id: ObjectId = typeof user._id === 'string' ? new ObjectId(user._id) : user._id;
+        const user_id: string = user_obj_id.toString();
         const access_tkn = {
             user_id,
             displayname: user.displayname,
@@ -46,13 +47,13 @@ export default class AuthController {
         // interface based on the mongodb document
         const session_obj: UserSession = {
             _id: refresh_tkn,
-            userId: user._id,
+            userId: user_obj_id,
             ip: requestinfo.ip,
             device: session_device ?? "Unknown",
             createdAt: new Date(),
             expiresAt: session_expdate,
         }
-        if ((await this.authRepo.countSessions(user._id)) >= 5) this.authRepo.deleteOldestSession(user._id);
+        if ((await this.authRepo.countSessions(user_obj_id)) >= 5) this.authRepo.deleteOldestSession(user_obj_id);
         await this.authRepo.saveSession(session_obj);
         const access_jwt = await new jose.SignJWT(access_tkn)
             .setProtectedHeader({ alg: 'HS256' })
